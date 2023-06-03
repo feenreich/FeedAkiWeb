@@ -1,19 +1,67 @@
-// Generate a random number between 1 and 100
-const targetNumber = Math.floor(Math.random() * 100) + 1;
+let questions = []; // Array to store the questions
+let score = 0; // Variable to track the score
+let rounds = 0; // Variable to track the number of rounds
+let answer = 0;
 
-// Function to check the player's guess
-function checkGuess() {
-  const guess = parseInt(document.getElementById("guessInput").value);
+// Function to read a file and parse questions and answers
+function fetchQuestions() {
+  fetch("problem.txt/")
+  .then((res) => res.text())
+  .then((text) => {
+    const lines = text.split('\n');
+    lines.forEach((line) => {
+      const parts = line.trim().split(' ');
+      const question = parts[0].trim();
+      const answer = parseInt(parts[1]);
 
-  if (isNaN(guess)) {
-    document.getElementById("result").textContent = "Invalid input. Please enter a number.";
-  } else if (guess < 1 || guess > 100) {
-    document.getElementById("result").textContent = "Please enter a number between 1 and 100.";
-  } else if (guess < targetNumber) {
-    document.getElementById("result").textContent = "Too low. Guess higher!";
-  } else if (guess > targetNumber) {
-    document.getElementById("result").textContent = "Too high. Guess lower!";
+      console.log(line)
+      if (question && !isNaN(answer)) {
+        questions.push({ question, answer });
+      }
+    });
+   })
+  .catch((e) => console.error(e));
+}
+
+// Function to randomly select and display a question
+function displayQuestion() {
+  const randomIndex = Math.floor(Math.random() * questions.length);
+  const questionElement = document.getElementById("question");
+
+  questionElement.textContent = randomIndex + 38;
+  //questions[randomIndex][0];
+  //document.getElementById("title").textContent = '38';
+
+
+  // Remove the answered question from the array
+  // questions.splice(randomIndex, 1);
+  answer = parseInt(questions[randomIndex][1]);
+}
+
+// Function to handle the user's answer
+function answerQuestion(button) {
+  const answer = parseInt(button.getAttribute("data-answer"));
+
+  if (answer === 1 && button.id === "yesButton") {
+    score += 10;
+  } else if (answer === 0 && button.id === "noButton") {
+    score += 10;
+  }
+
+  rounds++;
+
+  if (rounds < 10) {
+    displayQuestion();
   } else {
-    document.getElementById("result").textContent = "Congratulations! You guessed the number!";
+    // Display the final score
+    const scoreElement = document.getElementById("score");
+    scoreElement.textContent = `Final Score: ${score}`;
+
+    // Disable the buttons after 10 rounds
+    document.getElementById("yesButton").disabled = true;
+    document.getElementById("noButton").disabled = true;
   }
 }
+
+// Fetch the questions when the page loads
+window.onload = fetchQuestions();

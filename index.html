@@ -1,19 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Guess the Number</title>
+  <title>Question Game</title>
   <style>
-    #result {
+    #question {
       font-weight: bold;
+      margin-bottom: 20px;
+    }
+  
+    #image {
+      margin-bottom: 20px;
+    }
+  
+    #buttons {
+      display: flex;
+      justify-content: center;
+    }
+  
+    .btn {
+      margin: 0 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Guess the Number</h1>
-  <p>Guess a number between 1 and 100:</p>
-  <input type="number" id="guessInput">
-  <button onclick="checkGuess()">Submit</button>
-  <p id="result"></p>
+  <h1 id="title">Feed Aki</h1>
+  <img src="bg_bear.png" alt="Question Image" id="image">
+  <p id="question">LALALA</p> 
+  <!-- a comment -->
+  <div id="buttons">
+    <button class="btn" id="yesButton" onclick="answerQuestion(this)">Yes</button>
+    <button class="btn" id="noButton" onclick="answerQuestion(this)">No</button>
+  </div>
+  <p id="score"></p>
 
   <script src="script.js"></script>
 </body>
